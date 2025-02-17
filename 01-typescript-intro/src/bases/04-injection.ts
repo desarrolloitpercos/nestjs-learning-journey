@@ -1,5 +1,5 @@
-import { PokeApiAdapter } from '../api/pokeApi.adapter';
-import { Move} from '../interfaces/pokeapi-response.interface';
+import { HttpAdapter, PokeApiAdapter, PokeApiAdapterFetch } from '../api/pokeApi.adapter';
+import { Move, PokeapiResponse} from '../interfaces/pokeapi-response.interface';
 
 export class Pokemon{
 
@@ -21,7 +21,7 @@ export class Pokemon{
         public readonly id:number, // Esta propiedad impide error para asignar nuevo valor a este atributo
         public name:string,
         // A continuacion realiza inyeccion de dependencias
-        private http:PokeApiAdapter
+        private http:HttpAdapter
     ){}
 
     public scream(){
@@ -34,7 +34,7 @@ export class Pokemon{
     }
 
     async getMoves(): Promise<Move[]> {
-        const data = await this.http.get(`https://pokeapi.co/api/v2/pokemon/${ this.id }`); // Implementa desestrcuturacion al acceder directamente a propiedad de la respuesta
+        const data = await this.http.get<PokeapiResponse>(`https://pokeapi.co/api/v2/pokemon/${ this.id }`); // Implementa desestrcuturacion al acceder directamente a propiedad de la respuesta
         console.log(data.moves);
 
         return data.moves;
@@ -44,7 +44,13 @@ export class Pokemon{
 
 const pokeApi = new PokeApiAdapter();
 
-export const mew = new Pokemon(151, 'Mew',pokeApi)
+const pokeApiFetch = new PokeApiAdapterFetch();
+
+
+// export const mew = new Pokemon(151, 'Mew',pokeApi);
+
+export const mew = new Pokemon(151, 'Mew',pokeApiFetch); // Funciona igual que la primer definicion gracias a la interfaz HttpAdapter
+
 // mew.id = 10 // Genera error ya que la propiedad ya fue definida
 
 console.log(mew.imageUrl);
