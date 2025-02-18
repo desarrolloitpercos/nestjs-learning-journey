@@ -42,7 +42,7 @@ export class Pokemon{
 }
 
 
-const pokeApi = new PokeApiAdapter();
+// const pokeApi = new PokeApiAdapter();
 
 const pokeApiFetch = new PokeApiAdapterFetch();
 

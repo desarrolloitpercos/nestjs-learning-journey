@@ -1,7 +1,9 @@
 import {templateString} from './bases/01-types';
 // import { vulpix } from './bases/02-objects';
 // import { mew } from './bases/03-classes';
-import { mew } from './bases/04-injection';
+// import { mew } from './bases/04-injection';
+// import { vulpix } from './bases/05-decorators';
+import { vulpix } from './bases/06-decorators';
 
 export function setupCounter(element: HTMLButtonElement) {
   let counter = 0
@@ -9,7 +11,7 @@ export function setupCounter(element: HTMLButtonElement) {
     counter = count
     element.innerHTML = `
     count is ${counter}
-    <a>Hi ${mew.name}</a>
+    <a>Hi ${vulpix.name}</a>
     </br>
     <a>Además... ${templateString}</a>
     `;
