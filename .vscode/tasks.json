@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "start:debug",
+			"path": "02-car-dealership",
+			"group": "rebuild",
+			"problemMatcher": [],
+			"label": "npm: start:debug - 02-car-dealership",
+			"detail": "nest start --debug --watch"
+		}
+	]
+}
