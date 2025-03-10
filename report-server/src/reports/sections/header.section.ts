@@ -16,25 +16,46 @@ interface HeaderOptions {
     showDate?: boolean;
 }
 
+const currentDate: Content = {
+    text: DateFormatter.getDDMMMMYYYY(new Date()),
+    alignment: 'right',
+    margin: [10, 50, 50, 60],
+}
+
 export const headerSection = (options: HeaderOptions): Content => {
     const { title, subTitle, showLogo = true, showDate = true } = options;
 
-    const headerLogo: Content  = showLogo ? logo : '';
-    const headerDate: Content = showDate ? {
-        text: DateFormatter.getDDMMMMYYYY(new Date()),
-        alignment: 'right',
-        margin: [20, 20]
-    } : '';
+    const headerLogo: Content = showLogo ? logo : '';
+    const headerDate: Content = showDate ? currentDate : '';
+
+    const headerSubTitle: Content = subTitle
+        ? {
+                text: subTitle,                
+                alignment: 'right',
+                style: {
+                    bold: false,
+                    fontSize: 18
+                }
+        }
+        : '';
+
+
 
     const headerTitle: Content = title
-    ? {
-        text: title,
-        style: {
-            bold: true,
-            alignment: 'center'
+        ? {
+            stack: [{
+                text: title,
+                alignment: 'right',
+                margin: [0, 15, 0, 0],
+                style: {
+                    bold: true,
+                    fontSize: 22
+                }
+            },
+            headerSubTitle,
+        ]
         }
-    }
-    : '';
+        : '';
 
 
     return {
