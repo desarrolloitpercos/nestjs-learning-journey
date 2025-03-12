@@ -16,7 +16,7 @@ yarn add class-validator class-transformer
 2. instalar dependencias `npm install`
 3. Clonar `env.template` y renombrar a `.env` y completar variables de entorno  en .env
 4. Levantar la base de datos `docker compose up -d`
-5. `npx prisma deb pull`
+5. `npx prisma db pull`
 5. Generar el Prisma Client `npx prisma generate`
 6. Ejecutar proyecto `npm run start:dev`
 
