@@ -5,13 +5,49 @@ import * as Utils from '../helpers/chart-utils';
 
 const svgContent = fs.readFileSync('src/assets/ford.svg', 'utf8');
 
+const generateDonut = async () => {
+
+    const DATA_COUNT = 5;
+    const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
+
+    const data = {
+        labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue'],
+        datasets: [
+            {
+                label: 'Dataset 1',
+                data: Utils.numbers(NUMBER_CFG),
+                backgroundColor: Object.values(Utils.CHART_COLORS),
+            }
+        ]
+    };
+
+    const config = {
+        type: 'doughnut',
+        data: data,
+        options: {
+            title: {
+                display: true,
+                text: 'Chart.js Doughnut Chart'
+            },
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }                
+            }
+        },
+    };
+    return Utils.chartJsToImage(config);
+}
+
 const generateChartImage = async () => {
     const chartConfig = {
-        type:'bar',
-        data:{
-            labels:['Q1','Q2','Q3','Q4'], 
-            datasets:[{label:'Users',
-                data:[50,60,70,180]
+        type: 'bar',
+        data: {
+            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+            datasets: [{
+                label: 'Users',
+                data: [50, 60, 70, 180]
             }]
         }
     }
@@ -21,7 +57,12 @@ const generateChartImage = async () => {
 
 export const getBasicChartSvgReport =
     async (): Promise<TDocumentDefinitions> => {
-        const chart = await generateChartImage();
+
+        const [chart, chartDonut] = await Promise.all([generateChartImage(), generateDonut()]);
+
+        // const chart = await generateChartImage();
+        // const chartDonut = await generateDonut();
+        
         return {
             content: [
                 {
@@ -33,6 +74,10 @@ export const getBasicChartSvgReport =
                     image: chart,
                     width: 500,
                 },
+                {
+                    image: chartDonut,
+                    width: 500
+                }
             ]
         }
     }
