@@ -12,6 +12,18 @@ export class StoreReportsController {
     const pdfDoc = await this.storeReportsService.getOrderByIdReport(+orderId);
 
     response.setHeader('Content-Type', 'application/pdf');
+    pdfDoc.info.Title = 'Order - Report'
+    pdfDoc.pipe(response);
+    pdfDoc.end();
+  }
+
+  @Get('svg-charts')
+  async getSvgCharts(@Res() response: Response){
+
+    const pdfDoc = await this.storeReportsService.getSvcCharts();
+
+    response.setHeader('Content-Type', 'application/pdf');
+    pdfDoc.info.Title = 'Order - Charts'
     pdfDoc.pipe(response);
     pdfDoc.end();
   }

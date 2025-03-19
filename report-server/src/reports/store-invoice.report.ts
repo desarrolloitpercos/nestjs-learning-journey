@@ -78,7 +78,7 @@ export const getStoreInvoiceReport = (value: ReportValues): TDocumentDefinitions
             {
                 columns: [
                     {
-                        text: '15 Montgomery Str, Suite 100, \nOttawa ON K2Y 9X1, CANADA\nBN: 12783671823\nhttps://devtalles.com',
+                        text: `${customers.address}, \nOttawa ON K2Y 9X1, ${customers.city}\nBN: ${customers.postal_code}\nhttps://devtalles.com`,
                         bold: true
                     }, {
                         text: [{text: 'Recibo No#: 10255\n', bold: true, fontSize: 14},
@@ -93,7 +93,7 @@ export const getStoreInvoiceReport = (value: ReportValues): TDocumentDefinitions
             {
                 text: [
                     {text: `Cobrar a:\n\n`, bold: true, fontSize: 14},
-                    `Razón Social: Richter Supermarkt\nMichael Holz\nGrenzacherweg 237`,
+                    `Razón Social: ${customers.contact_name}\nMichael Holz\nGrenzacherweg 237`,
                 ]
             },
 
@@ -106,19 +106,19 @@ export const getStoreInvoiceReport = (value: ReportValues): TDocumentDefinitions
                     widths: [50, '*', 'auto', 'auto', 'auto'],
                     body: [
                         ['ID', 'Descripción', 'Cantidad', 'Precio', 'Total'],
-                        ['1', 'Producto 1', '1', '100', CurrencyFormatter.formatCurrency(100)],
-                        ['2', 'Producto 2', '2', '200', 
+                        ...order_details.map((order_detail) => [
+                            order_detail.order_detail_id.toString(),
+                            order_detail.products.product_name,
+                            order_detail.quantity,                            
                             {
-                                text: CurrencyFormatter.formatCurrency(1500),
+                                text:CurrencyFormatter.formatCurrency(+order_detail.products.price),
                                 alignment: 'right'
-                            }
-                        ],
-                        ['3', 'Producto 3', '3', '300', 
+                            },
                             {
-                                text: CurrencyFormatter.formatCurrency(100),
+                                text:CurrencyFormatter.formatCurrency(+order_detail.products.price*order_detail.quantity),
                                 alignment: 'right'
-                            }
-                        ]
+                            },
+                        ])
                     ],
                 }
             },
