@@ -3,10 +3,17 @@ import { DateFormatter } from "src/helpers";
 
 const logo: Content = {
     image: 'src/assets/tucan-code-logo.png',
+    fontSize:10,
     width: 100,
     height: 100,
     alignment: 'center',
     margin: [0, 0, 0, 20]
+};
+
+const currentDate: Content = {
+    text: DateFormatter.getDDMMMMYYYY(new Date()),
+    alignment: 'right',
+    margin: [10, 50, 50, 60],
 };
 
 interface HeaderOptions {
@@ -14,13 +21,8 @@ interface HeaderOptions {
     subTitle?: string;
     showLogo?: boolean;
     showDate?: boolean;
-}
+};
 
-const currentDate: Content = {
-    text: DateFormatter.getDDMMMMYYYY(new Date()),
-    alignment: 'right',
-    margin: [10, 50, 50, 60],
-}
 
 export const headerSection = (options: HeaderOptions): Content => {
     const { title, subTitle, showLogo = true, showDate = true } = options;
@@ -31,10 +33,10 @@ export const headerSection = (options: HeaderOptions): Content => {
     const headerSubTitle: Content = subTitle
         ? {
                 text: subTitle,                
-                alignment: 'right',
+                alignment: 'center',
                 style: {
                     bold: false,
-                    fontSize: 18
+                    fontSize: 14
                 }
         }
         : '';
@@ -45,11 +47,11 @@ export const headerSection = (options: HeaderOptions): Content => {
         ? {
             stack: [{
                 text: title,
-                alignment: 'right',
+                alignment: 'center',
                 margin: [0, 15, 0, 0],
                 style: {
                     bold: true,
-                    fontSize: 22
+                    fontSize: 14
                 }
             },
             headerSubTitle,

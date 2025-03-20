@@ -27,10 +27,10 @@ export const getDonutChart = async (options: DonutOptions): Promise<string> => {
         type: 'doughnut',
         data: data,
         options: {
-            title: {
-                display: true,
-                text: 'Chart.js Doughnut Chart'
-            },
+            // title: {
+            //     display: true,
+            //     text: 'Chart.js Doughnut Chart'
+            // },
             responsive: true,
             plugins:{
                 datalabels: {

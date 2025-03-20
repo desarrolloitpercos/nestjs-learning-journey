@@ -1,17 +1,19 @@
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import * as Utils from 'src/helpers/chart-utils';
 import { getDonutChart } from "./charts/donut.chart";
+import { getLineChart } from "./charts/line.chart";
+import { headerSection } from "./sections/header.section";
 
 interface TopCountry {
-    country: string | null;
-    customers: number;
-  }
-  
-  interface ReportOptions {
-    title?: string;
-    subTitle?: string;
-    topCountries: TopCountry[];
-  }
+  country: string | null;
+  customers: number;
+}
+
+interface ReportOptions {
+  title?: string;
+  subTitle?: string;
+  topCountries: TopCountry[];
+}
 
 // const generateTopCountryDonut = async (topCountries: TopCountry[]): Promise<string> => {
 //     const data = {
@@ -51,27 +53,69 @@ interface TopCountry {
 //     return Utils.chartJsToImage(config);
 // };
 
-export const getStatisticsReport = async (options: ReportOptions): Promise<TDocumentDefinitions> =>{
-    
-    const {title, subTitle, topCountries} = options;
+export const getStatisticsReport = async (options: ReportOptions): Promise<TDocumentDefinitions> => {
 
-    // En esta linea se imlementa la funcion con el metodo en esta misma clase
-    // const donutChart = await generateTopCountryDonut(topCountries);
+  const { title, subTitle, topCountries } = options;
 
-    const donutChart = await getDonutChart({
-        entries: topCountries.map((c) => ({
-            label: c.country,
-            value: c.customers
-        })),
-        position: 'left'
-    });
+  // En esta linea se imlementa la funcion con el metodo en esta misma clase
+  // const donutChart = await generateTopCountryDonut(topCountries);
 
-    const docDefinition: TDocumentDefinitions = {
-          content: [{
+  const donutChart = await getDonutChart({
+    entries: topCountries.map((c) => ({
+      label: c.country,
+      value: c.customers
+    })),
+    position: 'left'
+  });
+
+  const lineChart = await getLineChart({
+    entries: topCountries.map((c) => ({
+      label: c.country,
+      value: c.customers
+    })),
+  });
+
+  const docDefinition: TDocumentDefinitions = {
+    pageMargins: [40, 100, 40, 60],
+    header: headerSection({
+      title: options.title ?? 'Estadísticas de clientes',
+      subTitle: options.subTitle ?? 'Top 10 países con más clientes',
+    }),
+    content: [{
+      columns: [{
+        stack: [
+          {
+            text: '10 países con más clientes',
+            alignment: 'center',
+            margin: [0, 0, 0, 10]
+          }, {
             image: donutChart,
-            width: 500
-          }]
-        };
-    
-        return docDefinition;
+            width: 320
+          }
+        ],
+        margin: [0, 0, 0, 50]
+      }, {
+        layout: 'lightHorizontalLines',
+        width: 'auto',
+        table: {
+          headerRows: 1,
+          widths: [100, 'auto'],
+          body: [
+            ['País', 'Clientes'],
+            ...options.topCountries.map((c) => [
+              c.country ?? '',
+              c.customers
+            ]),
+          ]
+        }
+      }]
+    },
+    {
+      image: lineChart,
+      width: 500,
+      alignment: 'center'
+    }]
+  };
+
+  return docDefinition;
 };
