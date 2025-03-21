@@ -3,6 +3,8 @@ import * as Utils from 'src/helpers/chart-utils';
 import { getDonutChart } from "./charts/donut.chart";
 import { getLineChart } from "./charts/line.chart";
 import { headerSection } from "./sections/header.section";
+import { getBarChart } from "./charts/bar.chart";
+import { getPolarChart } from "./charts/polar.chart";
 
 interface TopCountry {
   country: string | null;
@@ -55,25 +57,26 @@ interface ReportOptions {
 
 export const getStatisticsReport = async (options: ReportOptions): Promise<TDocumentDefinitions> => {
 
-  const { title, subTitle, topCountries } = options;
-
   // En esta linea se imlementa la funcion con el metodo en esta misma clase
   // const donutChart = await generateTopCountryDonut(topCountries);
 
-  const donutChart = await getDonutChart({
-    entries: topCountries.map((c) => ({
-      label: c.country,
-      value: c.customers
-    })),
-    position: 'left'
-  });
-
-  const lineChart = await getLineChart({
-    entries: topCountries.map((c) => ({
-      label: c.country,
-      value: c.customers
-    })),
-  });
+  const [donutChart, lineChart, barChart, polarChart] = await Promise.all([
+    getDonutChart({
+      entries: options.topCountries.map((c) => ({
+        label: c.country,
+        value: c.customers
+      })),
+      position: 'left'
+    }),
+    getLineChart({
+      entries: options.topCountries.map((c) => ({
+        label: c.country,
+        value: c.customers
+      }))
+    }),
+    getBarChart(),
+    getPolarChart()
+  ]);
 
   const docDefinition: TDocumentDefinitions = {
     pageMargins: [40, 100, 40, 60],
@@ -112,9 +115,26 @@ export const getStatisticsReport = async (options: ReportOptions): Promise<TDocu
     },
     {
       image: lineChart,
-      width: 500,
+      width: 300,
       alignment: 'center'
-    }]
+    },
+    
+    {
+      columns:[
+        {
+          image: barChart,
+          width: 250,
+          alignment: 'center'
+        },
+        {
+          image: polarChart,
+          width: 250,
+          alignment: 'center'
+        },
+      ],
+      margin: [0,50,0,0]
+    }
+  ]
   };
 
   return docDefinition;
